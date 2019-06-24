@@ -6,20 +6,44 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private Button playButton;
+    private SeekBar mSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSeekBar = findViewById(R.id.mSeekBar);
+
         mediaPlayer = new MediaPlayer();
         // constructor
         mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.game_field);
+        mSeekBar.setMax(mediaPlayer.getDuration()); // set the seekbar's Maximum property to the duration of the mp3
+
+        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if(b) {// if the touch is coming from the user(see method parameters)
+                    mediaPlayer.seekTo(i);// i represents seekbar progress (see parameters)
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
